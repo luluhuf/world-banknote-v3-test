@@ -72,57 +72,6 @@
  `;
   document.head.append(css);
 
-
-function updateCollectionStats() {
-  if (typeof notes === "undefined") return;
-
-  const items = document.getElementById("items");
-  if (!items) return;
-
-  let dashboard = document.getElementById("pc-stats");
-
-  if (!dashboard) {
-    dashboard = document.createElement("div");
-    dashboard.id = "pc-stats";
-  }
-
-  dashboard.style.cssText =
-    "display:grid;grid-template-columns:repeat(3,minmax(0,1fr));" +
-    "gap:8px;margin:15px 0;width:100%;";
-
-  items.before(dashboard);
-
-  const stats = [
-    ["💵", notes.length, "Total"],
-    ["✨", notes.filter(n => n.era === "current").length, "Actuels"],
-    ["📜", notes.filter(n => n.era === "former").length, "Anciens"]
-  ];
-
-  dashboard.replaceChildren();
-
-  for (const [icon, value, label] of stats) {
-    const card = document.createElement("div");
-    card.style.cssText =
-      "background:#15283c;border:1px solid #62543d;" +
-      "border-radius:12px;padding:12px 4px;" +
-      "text-align:center;color:#e5bd70;min-width:0;";
-
-    const number = document.createElement("strong");
-    number.style.cssText =
-      "display:block;font-size:24px;margin-bottom:6px;";
-    number.textContent = value;
-
-    const caption = document.createElement("small");
-    caption.style.cssText =
-      "display:block;color:#cbd5df;font-size:11px;";
-    caption.textContent = icon + " " + label;
-
-    card.append(number, caption);
-    dashboard.append(card);
-  }
-}
-
-
   let search = "";
   const image = (n,side) =>
     side==="front"
@@ -325,17 +274,12 @@ countries.get(n.country || "Non identifié").grid.append(card);
        typeof show!=="function")return;
 
     const originalRender=render;
-    
-render=function(){
-  originalRender();
-  renderGallery();
-  updateCollectionStats();
-};
-
+    render=function(){
+      originalRender();
+      renderGallery();
     };
 
     renderGallery();
-  updateCollectionStats();
   }
 
   install();
