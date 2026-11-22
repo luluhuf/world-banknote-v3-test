@@ -144,7 +144,7 @@
   const destinations = [
     ["💵","Mes billets","collection"],
     ["📸","Scanner","scan"],
-    ["🔒","À débloquer","unlock"],
+    ["🔒","À débloquer","world"],
     ["📊","Statistiques","stats"],
     ["🌍","Pays","countries"],
     ["🔗","Partager","share"]
@@ -163,7 +163,7 @@
     button.append(symbol,title);
 
     button.addEventListener("click", () => {
-    if (["collection","scan","share","unlock"].includes(destination)) {
+    if (["collection","scan","share","world"].includes(destination)) {
         show(destination);
       } else {
         alert("Cette rubrique arrive dans la prochaine étape de la V5 !");
