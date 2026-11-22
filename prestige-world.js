@@ -598,6 +598,7 @@ const values = catalogCountry?.current || denominations[country.code];
 card.style.cursor = "pointer";
 
 card.onclick = () => {
+  alert("TEST : clic détecté !");
   if (owned) {
     const billet = matching.find(n =>
       n.era === "current" &&
