@@ -72,40 +72,30 @@
  `;
   document.head.append(css);
 
+
 function updateCollectionStats() {
   if (typeof notes === "undefined") return;
+
+  const items = document.getElementById("items");
+  if (!items) return;
 
   let dashboard = document.getElementById("pc-stats");
 
   if (!dashboard) {
     dashboard = document.createElement("div");
     dashboard.id = "pc-stats";
-    dashboard.style.cssText =
-      "display:grid;grid-template-columns:repeat(3,1fr);" +
-      "gap:8px;margin:15px 0;";
-
-    const items = document.getElementById("items");
-    if (!items) return;
-    items.before(dashboard);
   }
 
-  const countries = new Set(
-    notes.map(n => n.country).filter(Boolean)
-  );
+  dashboard.style.cssText =
+    "display:grid;grid-template-columns:repeat(3,minmax(0,1fr));" +
+    "gap:8px;margin:15px 0;width:100%;";
 
-  const references = new Set(
-    notes.map(n =>
-      [n.country, n.denomination, n.currency,
-       n.issue_year, n.era].join("|")
-    )
-  );
-
-  const duplicates = notes.length - references.size;
+  items.before(dashboard);
 
   const stats = [
-    ["💵", notes.length, "Billets"],
-    ["🌍", countries.size, "Pays"],
-    ["📚", duplicates, "Doublons"]
+    ["💵", notes.length, "Total"],
+    ["✨", notes.filter(n => n.era === "current").length, "Actuels"],
+    ["📜", notes.filter(n => n.era === "former").length, "Anciens"]
   ];
 
   dashboard.replaceChildren();
@@ -114,22 +104,24 @@ function updateCollectionStats() {
     const card = document.createElement("div");
     card.style.cssText =
       "background:#15283c;border:1px solid #62543d;" +
-      "border-radius:12px;padding:12px 5px;" +
-      "text-align:center;color:#e5bd70;";
+      "border-radius:12px;padding:12px 4px;" +
+      "text-align:center;color:#e5bd70;min-width:0;";
 
     const number = document.createElement("strong");
     number.style.cssText =
-      "display:block;font-size:24px;margin:6px 0;";
+      "display:block;font-size:24px;margin-bottom:6px;";
     number.textContent = value;
 
     const caption = document.createElement("small");
-    caption.style.color = "#cbd5df";
+    caption.style.cssText =
+      "display:block;color:#cbd5df;font-size:11px;";
     caption.textContent = icon + " " + label;
 
     card.append(number, caption);
     dashboard.append(card);
   }
 }
+
 
   let search = "";
   const image = (n,side) =>
