@@ -605,20 +605,63 @@ card.onclick = () => {
     );
 
     if (!billet) return;
+      
+const fiche = document.createElement("div");
+fiche.style.cssText = `
+  position:fixed;inset:0;z-index:10001;
+  background:#091625;color:#f8f4e9;
+  overflow-y:auto;padding:25px 18px 90px;
+`;
 
-    alert(
-      "💵 " + item.label + "\n" +
-      "Pays : " + country.name + "\n" +
-      "Année : " + (billet.issue_year || "Non renseignée") + "\n\n" +
-      (billet.history || billet.bio || "Histoire à compléter")
-    );
+const contenu = document.createElement("div");
+contenu.style.cssText = "max-width:600px;margin:auto";
+
+const retour = document.createElement("button");
+retour.textContent = "← Retour aux billets";
+retour.style.cssText = `
+  background:#e5bd70;color:#091625;
+  border:0;border-radius:12px;
+  padding:14px;font-weight:bold;
+  margin-bottom:25px;
+`;
+retour.onclick = () => fiche.remove();
+
+const titre = document.createElement("h2");
+titre.textContent = "💵 " + item.label;
+titre.style.color = "#e5bd70";
+
+const infos = document.createElement("div");
+infos.style.cssText = `
+  background:#15283c;
+  border:1px solid #b88938;
+  border-radius:16px;padding:20px;
+  line-height:1.9;
+`;
+
+const pays = document.createElement("p");
+pays.textContent = "🌍 Pays : " + country.name;
+
+const annee = document.createElement("p");
+annee.textContent = "📅 Année : " +
+  (billet.issue_year || "Non renseignée");
+
+const histoire = document.createElement("p");
+histoire.textContent = "📜 " +
+  (billet.history || billet.bio ||
+  "Histoire de ce billet à compléter.");
+
+infos.append(pays, annee, histoire);
+contenu.append(retour, titre, infos);
+fiche.append(contenu);
+document.body.append(fiche);
+
   } else {
     if (confirm(
       "🔒 " + item.label +
       "\n\nTu ne possèdes pas encore ce billet." +
       "\nVeux-tu ouvrir le scanner ?"
     )) {
-      overlay.remove();
+      fiche.remove();
       if (typeof show === "function") show("scan");
     }
   }
