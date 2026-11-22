@@ -270,6 +270,48 @@ Zimbabwe|ZW
   `;
   document.head.append(style);
 
+  // Styles des progressions dans les fiches pays
+  const progressStyle = document.createElement("style");
+
+  progressStyle.textContent = `
+    .world-overlay .world-stat {
+      background: #15283c;
+      border: 1px solid #66583f;
+      border-radius: 16px;
+      padding: 18px;
+      margin: 20px 0;
+    }
+
+    .world-overlay .world-gold {
+      color: #e5bd70;
+    }
+
+    .world-bar {
+      display: block;
+      width: 100%;
+      height: 12px;
+      background: #30435c;
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 14px 0;
+    }
+
+    .world-fill {
+      display: block;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        #b88938,
+        #e5bd70,
+        #f6dc9c
+      );
+      border-radius: 20px;
+      transition: width 0.6s ease;
+    }
+  `;
+
+  document.head.append(progressStyle);
+
   const world = document.createElement("section");
   world.id = "world";
   world.className = "hidden";
@@ -396,45 +438,6 @@ Zimbabwe|ZW
     .addEventListener("input", e => {
       search = e.target.value;
       
-  // Style de la progression Prestige
-  const progressStyle = document.createElement("style");
-
-  progressStyle.textContent = `
-    .world-stat {
-      background: #15283c;
-      border: 1px solid #344b61;
-      border-radius: 16px;
-      padding: 18px;
-      margin: 20px 0;
-    }
-
-    .world-gold {
-      color: #e5bd70;
-    }
-
-    .world-bar {
-      width: 100%;
-      height: 12px;
-      background: #30435c;
-      border-radius: 20px;
-      overflow: hidden;
-      margin: 14px 0;
-    }
-
-    .world-fill {
-      height: 100%;
-      background: linear-gradient(
-        90deg,
-        #b88938,
-        #e5bd70,
-        #f6dc9c
-      );
-      border-radius: 20px;
-      transition: width 0.6s ease;
-    }
-  `;
-
-  document.head.append(progressStyle);
 
       renderWorld();
     });
