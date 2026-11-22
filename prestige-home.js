@@ -163,12 +163,20 @@
     button.append(symbol,title);
 
     button.addEventListener("click", () => {
-    if (["collection","scan","share","world"].includes(destination)) {
-        show(destination);
-      } else {
-        alert("Cette rubrique arrive dans la prochaine étape de la V5 !");
-      }
-    });
+    
+button.addEventListener("click", () => {
+  if (["collection","scan","share","world"].includes(destination)) {
+    show(destination);
+
+    if (destination === "world") {
+      document.querySelector('#world [data-world="missing"]')?.click();
+    }
+
+  } else {
+    alert("Cette rubrique arrive dans la prochaine étape de la V5 !");
+  }
+});
+
 
     grid.appendChild(button);
   });
