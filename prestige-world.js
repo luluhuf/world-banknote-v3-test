@@ -346,11 +346,8 @@ Zimbabwe|ZW
 
   share.before(world);
 
-  const navButton = document.createElement("button");
-  navButton.dataset.page = "world";
-  navButton.textContent = "🌍 Monde";
-  nav.insertBefore(navButton, nav.querySelector('[data-page="share"]'));
-
+  const navButton = nav.querySelector('[data-page="unlock"]');
+navButton.dataset.page = "world";
   const flag = code => {
     return [...code.toUpperCase()]
       .map(c => String.fromCodePoint(
