@@ -480,6 +480,56 @@ Zimbabwe|ZW
     summary.textContent=matching.length+
       " billet(s) enregistré(s) pour ce pays.";
     detail.append(summary);
+    
+    // Progression des coupures par pays
+    const catalog = window.WBC_CATALOG?.getCountry(country.code);
+
+    if (catalog && catalog.current?.length) {
+      const unique = new Set(
+        matching
+          .filter(n =>
+            n.era === "current" &&
+            n.currency === catalog.currency
+          )
+          .map(n => Number(n.denomination))
+      );
+
+      const total = catalog.current.length;
+      const collected = catalog.current.filter(
+        b => unique.has(b.value)
+      ).length;
+
+      const percent = collected / total * 100;
+
+      const progress = document.createElement("div");
+      progress.className = "world-stat";
+
+      const heading = document.createElement("h3");
+      heading.className = "world-gold";
+      heading.textContent = "🏆 Progression actuelle";
+
+      const count = document.createElement("p");
+      count.textContent =
+        collected + " / " + total +
+        " coupures · " + percent.toFixed(1).replace(".", ",") + " %";
+
+      const bar = document.createElement("div");
+      bar.className = "world-bar";
+
+      const fill = document.createElement("div");
+      fill.className = "world-fill";
+      fill.style.width = percent + "%";
+
+      bar.append(fill);
+
+      const missing = document.createElement("p");
+      missing.textContent =
+        (total - collected) + " coupure(s) à trouver";
+
+      progress.append(heading, count, bar, missing);
+      detail.append(progress);
+    }
+
 
     const currentTitle=document.createElement("h3");
     currentTitle.textContent="💵 Billets actuels";
