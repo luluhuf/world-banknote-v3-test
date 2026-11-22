@@ -177,7 +177,7 @@
   info.className = "prestige-note";
   info.textContent = "WORLD BANKNOTE COLLECTOR • COLLECTION PRESTIGE";
 
-  home.replaceChildren(hero,grid,info);
+  home.prepend(hero,grid,info);
 
   const update = () => {
     const countries = new Set(
