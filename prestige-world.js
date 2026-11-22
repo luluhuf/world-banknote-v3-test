@@ -516,9 +516,19 @@ Zimbabwe|ZW
 
     const allNotes=typeof notes!=="undefined"?notes:[];
 
-    const matching=allNotes.filter(n=>
-      normalize(n.country)===normalize(country.name)
-    );
+    
+const matching = allNotes.filter(n => {
+  const sameCountry =
+    normalize(n.country) === normalize(country.name);
+
+  const sharedEuro =
+    euroCountries.has(country.code) &&
+    n.currency === "EUR" &&
+    n.era === "current";
+
+  return sameCountry || sharedEuro;
+});
+
 
     const summary=document.createElement("p");
     summary.textContent=matching.length+
