@@ -109,6 +109,24 @@
     }
   };
 
+  // Pays utilisant actuellement l'euro
+  const euroCountryCodes = [
+    "AD","AT","BE","BG","HR","CY","EE","FI",
+    "FR","DE","GR","IE","IT","LV","LT","LU",
+    "MT","MC","ME","NL","PT","SM","SK","SI",
+    "ES","VA"
+  ];
+
+  euroCountryCodes.forEach(code => {
+    catalog[code] = {
+      country: code,
+      currency: "EUR",
+      currencyName: "Euro",
+      current: euroBanknotes,
+      former: []
+    };
+  });
+
   function getCountry(code) {
     return catalog[code] || null;
   }
