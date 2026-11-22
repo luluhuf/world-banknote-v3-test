@@ -1,4 +1,18 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e1b2b"><link rel="manifest" href="manifest.webmanifest"><title>World Banknote Collector V3</title><style>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e1b2b"><link rel="manifest" href="manifest.webmanifest">
+<title>World Banknote Collector V3</title>
+<style>
+#auth {
+  visibility: hidden;
+}
+#auth.prestige-ready {
+  visibility: visible;
+}
+body:has(#auth:not(.hidden)) > h1 {
+  visibility: hidden;
+}
+</style>
+<style>
+
 :root{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#f5f7fc;background:#0e1b2b}*{box-sizing:border-box}body{margin:0 auto;max-width:740px;padding:20px 16px 110px}h1{font-size:27px;line-height:1.1;margin:6px 0 24px}h1 small{display:block;letter-spacing:3px;color:#e2b85d;font-size:12px;margin-bottom:8px}h2{font-size:23px;margin:14px 0}h3{font-size:18px}p{color:#bbc9d9;line-height:1.5}.card{background:#24364d;border-radius:17px;padding:18px;margin:13px 0}.gold{color:#e2b85d}.muted{color:#b3c1d2;font-size:13px}.notice{border-left:3px solid #e2b85d;padding-left:12px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.wrap{flex-wrap:wrap}.hidden{display:none!important}button,.filelabel{display:inline-block;border:0;border-radius:12px;background:#d9b15e;color:#101d2e;padding:13px 15px;font-size:15px;font-weight:700;cursor:pointer;margin:5px 3px 5px 0}button.secondary{background:#30435c;color:white}button:disabled{opacity:.5}input[type=file]{display:none}input[type=text],input[type=email],input[type=password],select{width:100%;padding:12px;border:1px solid #62748e;border-radius:10px;background:#17283d;color:white;font-size:16px}.field{margin:11px 0}.field label{display:block;color:#e2b85d;margin-bottom:5px}.preview{width:100%;max-height:250px;object-fit:contain;border-radius:10px;background:#0b1624;margin-top:10px}.thumb{width:120px;height:76px;object-fit:cover;border-radius:8px}.pill{border:1px solid #63738a;border-radius:30px;font-size:12px;padding:5px 9px}nav{position:fixed;bottom:0;left:0;right:0;background:#17283d;border-top:1px solid #45556a;display:flex;justify-content:space-around;padding:10px 2px max(14px,env(safe-area-inset-bottom));z-index:2}nav button{font-size:12px;padding:6px 3px;background:none;color:#b8c5d4;flex:1}nav button.active{color:#e2b85d}a{color:#f0cb7a}#status,#auth-status,#share-status{white-space:pre-wrap}small{font-size:12px}hr{border:0;border-top:1px solid #496078;margin:18px 0}
 </style></head><body><h1><small>WORLD BANKNOTE</small>COLLECTOR<span class="gold">.</span> <span class="pill">V3 Bêta</span></h1>
 <section id="viewer" class="hidden"><h2>Collection partagée</h2><p>Consultation uniquement : aucune modification n'est possible ici.</p><p id="viewerStatus"></p><div id="viewerItems"></div></section>
