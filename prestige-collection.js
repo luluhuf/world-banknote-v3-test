@@ -39,7 +39,37 @@
       touch-action:pinch-zoom
     }
     .pc-detail h2 {color:#e5bd70}
-  `;
+ 
+.pc-country {
+  grid-column:1/-1;
+  border:1px solid #62543d;
+  border-radius:15px;
+  overflow:hidden;
+  background:#102238;
+}
+.pc-country summary {
+  padding:16px;
+  color:#e5bd70;
+  font-weight:bold;
+  cursor:pointer;
+  list-style:none;
+}
+.pc-country summary::-webkit-details-marker {
+  display:none;
+}
+.pc-country-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  padding:12px;
+}
+.pc-country-count {
+  float:right;
+  color:#cbd5df;
+  font-size:12px;
+  font-weight:normal;
+}
+ `;
   document.head.append(css);
 
   let search = "";
