@@ -263,7 +263,9 @@ for (const n of sorted) {
         wait.textContent="⏳ À synchroniser";
         card.append(wait);
       }
-      target.append(card);
+      
+countries.get(n.country || "Non identifié").grid.append(card);
+
     }
   }
 
