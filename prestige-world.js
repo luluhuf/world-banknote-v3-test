@@ -594,6 +594,36 @@ const values = catalogCountry?.current || denominations[country.code];
 
         const card=document.createElement("div");
         card.className="world-note"+(owned?" owned":"");
+        
+card.style.cursor = "pointer";
+
+card.onclick = () => {
+  if (owned) {
+    const billet = matching.find(n =>
+      n.era === "current" &&
+      Number(n.denomination) === item.value
+    );
+
+    if (!billet) return;
+
+    alert(
+      "💵 " + item.label + "\n" +
+      "Pays : " + country.name + "\n" +
+      "Année : " + (billet.issue_year || "Non renseignée") + "\n\n" +
+      (billet.history || billet.bio || "Histoire à compléter")
+    );
+  } else {
+    if (confirm(
+      "🔒 " + item.label +
+      "\n\nTu ne possèdes pas encore ce billet." +
+      "\nVeux-tu ouvrir le scanner ?"
+    )) {
+      overlay.remove();
+      if (typeof show === "function") show("scan");
+    }
+  }
+};
+
 
         const name=document.createElement("strong");
         name.textContent=(owned?"✓ ":"🔒 ")+item.label;
