@@ -401,6 +401,187 @@ Zimbabwe|ZW
   world.querySelectorAll("[data-world]").forEach(b => {
     b.onclick = () => {
       mode = b.dataset.world;
+      
+  /* Prestige World — Fiches pays V1 */
+
+  const denominations = {
+    RO: [
+      {value:1, label:"1 leu"},
+      {value:5, label:"5 lei"},
+      {value:10, label:"10 lei"},
+      {value:20, label:"20 lei"},
+      {value:50, label:"50 lei"},
+      {value:100, label:"100 lei"},
+      {value:200, label:"200 lei"},
+      {value:500, label:"500 lei"}
+    ]
+  };
+
+  const detailStyle = document.createElement("style");
+  detailStyle.textContent = `
+    .world-overlay {
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background:#091625;
+      color:#f8f4e9;
+      overflow-y:auto;
+      padding:20px 16px 90px;
+    }
+    .world-detail {
+      max-width:650px;
+      margin:auto;
+    }
+    .world-detail h2 {
+      color:#e5bd70;
+      margin-top:20px;
+    }
+    .world-note {
+      background:#15283c;
+      border:1px solid #334b60;
+      border-radius:13px;
+      padding:14px;
+      margin:10px 0;
+    }
+    .world-note.owned {
+      border-color:#e5bd70;
+    }
+    .world-note small {
+      display:block;
+      color:#b9c8d8;
+      margin-top:5px;
+    }
+  `;
+  document.head.append(detailStyle);
+
+  function openCountry(country) {
+    const overlay=document.createElement("div");
+    overlay.className="world-overlay";
+
+    const detail=document.createElement("div");
+    detail.className="world-detail";
+
+    const close=document.createElement("button");
+    close.textContent="← Retour au monde";
+    close.onclick=()=>overlay.remove();
+
+    const title=document.createElement("h2");
+    title.textContent=flag(country.code)+" "+country.name;
+
+    detail.append(close,title);
+
+    const allNotes=typeof notes!=="undefined"?notes:[];
+
+    const matching=allNotes.filter(n=>
+      normalize(n.country)===normalize(country.name)
+    );
+
+    const summary=document.createElement("p");
+    summary.textContent=matching.length+
+      " billet(s) enregistré(s) pour ce pays.";
+    detail.append(summary);
+
+    const currentTitle=document.createElement("h3");
+    currentTitle.textContent="💵 Billets actuels";
+    detail.append(currentTitle);
+
+    const values=denominations[country.code];
+
+    if(values) {
+      for(const item of values) {
+        const owned=matching.some(n=>
+          n.era==="current" &&
+          Number(n.denomination)===item.value
+        );
+
+        const card=document.createElement("div");
+        card.className="world-note"+(owned?" owned":"");
+
+        const name=document.createElement("strong");
+        name.textContent=(owned?"✓ ":"🔒 ")+item.label;
+
+        const status=document.createElement("small");
+        status.textContent=owned
+          ?"Coupure présente dans ta collection"
+          :"Coupure à trouver";
+
+        card.append(name,status);
+        detail.append(card);
+      }
+    } else {
+      const info=document.createElement("p");
+      info.textContent=
+        "Catalogue des coupures à compléter pour ce pays.";
+      detail.append(info);
+
+      for(const n of matching.filter(n=>n.era==="current")) {
+        const card=document.createElement("div");
+        card.className="world-note owned";
+        card.textContent="✓ "+n.denomination+
+          " "+(n.currency||"");
+        detail.append(card);
+      }
+    }
+
+    const formerTitle=document.createElement("h3");
+    formerTitle.textContent="📜 Billets anciens";
+    detail.append(formerTitle);
+
+    const former=matching.filter(n=>n.era==="former");
+
+    if(!former.length) {
+      const info=document.createElement("p");
+      info.textContent=
+        "Aucun ancien billet enregistré. "+
+        "Le catalogue historique sera ajouté progressivement.";
+      detail.append(info);
+    } else {
+      for(const n of former) {
+        const card=document.createElement("div");
+        card.className="world-note owned";
+        card.textContent="✓ "+n.denomination+
+          " "+(n.currency||"")+
+          (n.issue_year?" · "+n.issue_year:"");
+        detail.append(card);
+      }
+    }
+
+    overlay.append(detail);
+    document.body.append(overlay);
+  }
+
+  // Ouvre la fiche du pays sélectionné.
+  document.getElementById("worldList")
+    .addEventListener("click",event=>{
+      const card=event.target.closest(".world-country");
+      if(!card)return;
+
+      const cards=[
+        ...document.querySelectorAll(
+          "#worldList .world-country"
+        )
+      ];
+
+      const index=cards.indexOf(card);
+
+      const visible=countryData.filter(c=>{
+        const status=getStatus(c);
+        const matches=normalize(c.name)
+          .includes(normalize(search));
+
+        const selected=
+          mode==="all"||
+          (mode==="owned"&&status.owned)||
+          (mode==="missing"&&!status.owned)||
+          (mode==="current"&&status.current)||
+          (mode==="former"&&status.former);
+
+        return matches&&selected;
+      });
+
+      if(visible[index])openCountry(visible[index]);
+    });
+
       renderWorld();
     };
   });
