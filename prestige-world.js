@@ -485,7 +485,11 @@ Zimbabwe|ZW
     currentTitle.textContent="💵 Billets actuels";
     detail.append(currentTitle);
 
-    const values=denominations[country.code];
+    
+const catalogCountry = window.WBC_CATALOG?.getCountry(country.code);
+
+const values = catalogCountry?.current || denominations[country.code];
+
 
     if(values) {
       for(const item of values) {
