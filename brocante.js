@@ -113,10 +113,12 @@
 
   nav.before(section);
 
-  const button = document.createElement("button");
-  button.textContent = "🛒 Brocante";
-  button.dataset.page = "brocante";
-  nav.appendChild(button);
+ 
+const button = document.getElementById("brocanteNavBtn");
+if (!button) return;
+
+button.dataset.page = "brocante";
+ 
 
   const previousShow = show;
   show = function(pageName) {
