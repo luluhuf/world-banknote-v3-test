@@ -333,12 +333,17 @@ countries.get(n.country || "Non identifié").grid.append(card);
        typeof show!=="function")return;
 
     const originalRender=render;
-    render=function(){
-      originalRender();
-      renderGallery();
+    
+render=function(){
+  originalRender();
+  renderGallery();
+  updateCollectionStats();
+};
+
     };
 
     renderGallery();
+  updateCollectionStats();
   }
 
   install();
