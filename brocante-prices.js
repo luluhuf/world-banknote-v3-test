@@ -318,3 +318,69 @@
 
   initialize();
 })();
+
+/* World Banknote Collector — Numista Display V1 */
+(() => {
+  "use strict";
+
+  const originalFetch = window.fetch;
+
+  window.fetch = async function (...args) {
+    const response = await originalFetch.apply(this, args);
+
+    const url = String(args[0] || "");
+
+    if (!url.includes("/functions/v1/estimate-banknote")) {
+      return response;
+    }
+
+    try {
+      const data = await response.clone().json();
+      const references = data.numista?.references || [];
+
+      let target = document.getElementById("bc-numista");
+
+      if (!target) {
+        target = document.createElement("div");
+        target.id = "bc-numista";
+
+        target.style.cssText = `
+          margin-top:16px;
+          padding-top:12px;
+          border-top:1px solid #62543d;
+        `;
+
+        document.getElementById("bc-market")
+          ?.appendChild(target);
+      }
+
+      target.replaceChildren();
+
+      const heading = document.createElement("h3");
+      heading.textContent = "🏦 Références Numista";
+      target.appendChild(heading);
+
+      if (!references.length) {
+        const p = document.createElement("p");
+        p.textContent = "Aucune référence compatible trouvée.";
+        target.appendChild(p);
+        return response;
+      }
+
+      for (const ref of references) {
+        const p = document.createElement("p");
+
+        p.textContent =
+          `${ref.title} · Réf. ${ref.id} · ` +
+          `${ref.min_year ?? "?"}–${ref.max_year ?? "?"}`;
+
+        target.appendChild(p);
+      }
+
+    } catch (error) {
+      console.warn("Affichage Numista :", error);
+    }
+
+    return response;
+  };
+})();
