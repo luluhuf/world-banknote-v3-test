@@ -202,6 +202,38 @@
       return;
     }
 
+const countries = new Map();
+
+for (const n of sorted) {
+  const country = n.country || "Non identifié";
+
+  if (!countries.has(country)) {
+    const group = document.createElement("details");
+    group.className = "pc-country";
+
+    const heading = document.createElement("summary");
+    heading.textContent = "🌍 " + country;
+
+    const count = document.createElement("span");
+    count.className = "pc-country-count";
+    count.textContent = "0 billet";
+
+    const grid = document.createElement("div");
+    grid.className = "pc-country-grid";
+
+    heading.append(count);
+    group.append(heading, grid);
+    target.append(group);
+
+    countries.set(country, {grid, count, total: 0});
+  }
+
+  const entry = countries.get(country);
+  entry.total++;
+  entry.count.textContent =
+    entry.total + (entry.total > 1 ? " billets" : " billet");
+}
+
     for(const n of sorted){
       const card=document.createElement("div");
       card.className="pc-card";
