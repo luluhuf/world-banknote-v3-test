@@ -162,7 +162,6 @@
 
     button.append(symbol,title);
 
-    button.addEventListener("click", () => {
     
 button.addEventListener("click", () => {
   if (["collection","scan","share","world"].includes(destination)) {
