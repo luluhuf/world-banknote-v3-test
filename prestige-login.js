@@ -185,4 +185,5 @@
     "COLLECTION PRIVÉE · ACCÈS SÉCURISÉ";
 
   card.appendChild(footer);
+auth.classList.add("prestige-ready");
 })();
