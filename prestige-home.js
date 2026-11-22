@@ -128,8 +128,17 @@
 
   const hero = document.createElement("div");
   hero.className = "prestige-hero";
-  hero.innerHTML = `
-    <h2>🌍 Ma collection mondiale</h2>
+    hero.innerHTML = `
+    <div style="color:#e5bd70;font-size:13px;letter-spacing:2px;margin-bottom:10px;">
+      WORLD BANKNOTE COLLECTOR
+    </div>
+    <h2>👑 Bienvenue, luluhuf !</h2>
+    <p style="color:#b9c5d2;font-size:13px;">
+      Prêt à enrichir ta collection de billets du monde ? 🌍
+    </p>
+    <h3 style="color:#e5bd70;margin-top:22px;">
+      🌍 Ma collection mondiale
+    </h3>
     <div class="prestige-number" id="prestigeCountries">0 / 195</div>
     <p>Pays représentés dans ma collection</p>
     <div class="prestige-progress">
