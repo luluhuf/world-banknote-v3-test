@@ -1,0 +1,428 @@
+
+/* World Banknote Collector — Prestige World V1 */
+(() => {
+  "use strict";
+
+  const countryData = `
+Afghanistan|AF
+Afrique du Sud|ZA
+Albanie|AL
+Algérie|DZ
+Allemagne|DE
+Andorre|AD
+Angola|AO
+Antigua-et-Barbuda|AG
+Arabie saoudite|SA
+Argentine|AR
+Arménie|AM
+Australie|AU
+Autriche|AT
+Azerbaïdjan|AZ
+Bahamas|BS
+Bahreïn|BH
+Bangladesh|BD
+Barbade|BB
+Belgique|BE
+Belize|BZ
+Bénin|BJ
+Bhoutan|BT
+Biélorussie|BY
+Birmanie|MM
+Bolivie|BO
+Bosnie-Herzégovine|BA
+Botswana|BW
+Brésil|BR
+Brunei|BN
+Bulgarie|BG
+Burkina Faso|BF
+Burundi|BI
+Cambodge|KH
+Cameroun|CM
+Canada|CA
+Cap-Vert|CV
+Chili|CL
+Chine|CN
+Chypre|CY
+Colombie|CO
+Comores|KM
+Congo|CG
+Corée du Nord|KP
+Corée du Sud|KR
+Costa Rica|CR
+Côte d'Ivoire|CI
+Croatie|HR
+Cuba|CU
+Danemark|DK
+Djibouti|DJ
+Dominique|DM
+Égypte|EG
+Émirats arabes unis|AE
+Équateur|EC
+Érythrée|ER
+Espagne|ES
+Estonie|EE
+Eswatini|SZ
+États-Unis|US
+Éthiopie|ET
+Fidji|FJ
+Finlande|FI
+France|FR
+Gabon|GA
+Gambie|GM
+Géorgie|GE
+Ghana|GH
+Grèce|GR
+Grenade|GD
+Guatemala|GT
+Guinée|GN
+Guinée-Bissau|GW
+Guinée équatoriale|GQ
+Guyana|GY
+Haïti|HT
+Honduras|HN
+Hongrie|HU
+Îles Marshall|MH
+Îles Salomon|SB
+Inde|IN
+Indonésie|ID
+Irak|IQ
+Iran|IR
+Irlande|IE
+Islande|IS
+Israël|IL
+Italie|IT
+Jamaïque|JM
+Japon|JP
+Jordanie|JO
+Kazakhstan|KZ
+Kenya|KE
+Kirghizistan|KG
+Kiribati|KI
+Koweït|KW
+Laos|LA
+Lesotho|LS
+Lettonie|LV
+Liban|LB
+Liberia|LR
+Libye|LY
+Liechtenstein|LI
+Lituanie|LT
+Luxembourg|LU
+Macédoine du Nord|MK
+Madagascar|MG
+Malaisie|MY
+Malawi|MW
+Maldives|MV
+Mali|ML
+Malte|MT
+Maroc|MA
+Maurice|MU
+Mauritanie|MR
+Mexique|MX
+Micronésie|FM
+Moldavie|MD
+Monaco|MC
+Mongolie|MN
+Monténégro|ME
+Mozambique|MZ
+Namibie|NA
+Nauru|NR
+Népal|NP
+Nicaragua|NI
+Niger|NE
+Nigeria|NG
+Norvège|NO
+Nouvelle-Zélande|NZ
+Oman|OM
+Ouganda|UG
+Ouzbékistan|UZ
+Pakistan|PK
+Palaos|PW
+Palestine|PS
+Panama|PA
+Papouasie-Nouvelle-Guinée|PG
+Paraguay|PY
+Pays-Bas|NL
+Pérou|PE
+Philippines|PH
+Pologne|PL
+Portugal|PT
+Qatar|QA
+République centrafricaine|CF
+République démocratique du Congo|CD
+République dominicaine|DO
+Roumanie|RO
+Royaume-Uni|GB
+Russie|RU
+Rwanda|RW
+Saint-Christophe-et-Niévès|KN
+Sainte-Lucie|LC
+Saint-Marin|SM
+Saint-Vincent-et-les-Grenadines|VC
+Salvador|SV
+Samoa|WS
+Sao Tomé-et-Principe|ST
+Sénégal|SN
+Serbie|RS
+Seychelles|SC
+Sierra Leone|SL
+Singapour|SG
+Slovaquie|SK
+Slovénie|SI
+Somalie|SO
+Soudan|SD
+Soudan du Sud|SS
+Sri Lanka|LK
+Suède|SE
+Suisse|CH
+Suriname|SR
+Syrie|SY
+Tadjikistan|TJ
+Tanzanie|TZ
+Tchad|TD
+Tchéquie|CZ
+Thaïlande|TH
+Timor oriental|TL
+Togo|TG
+Tonga|TO
+Trinité-et-Tobago|TT
+Tunisie|TN
+Turkménistan|TM
+Turquie|TR
+Tuvalu|TV
+Ukraine|UA
+Uruguay|UY
+Vanuatu|VU
+Vatican|VA
+Venezuela|VE
+Viêt Nam|VN
+Yémen|YE
+Zambie|ZM
+Zimbabwe|ZW
+`.trim().split("\n").map(line => {
+    const [name, code] = line.split("|");
+    return {name, code};
+  });
+
+  const euroCountries = new Set([
+    "AD","AT","BE","BG","HR","CY","EE","FI",
+    "FR","DE","GR","IE","IT","LV","LT","LU",
+    "MT","MC","ME","NL","PT","SM","SK","SI",
+    "ES","VA"
+  ]);
+
+  const normalize = s => String(s ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+  let search = "";
+  let mode = "all";
+
+  const style = document.createElement("style");
+  style.textContent = `
+    #world .world-stat {
+      background:#15283c;
+      border:1px solid #66583f;
+      border-radius:16px;
+      padding:18px;
+      margin:12px 0;
+    }
+    #world .world-gold {color:#e5bd70}
+    #world .world-bar {
+      height:9px;background:#30435c;
+      border-radius:20px;overflow:hidden;
+      margin:14px 0;
+    }
+    #world .world-fill {
+      height:100%;background:#e5bd70;
+      transition:width .3s;
+    }
+    #world .world-search {
+      width:100%;padding:14px;
+      background:#102238;color:white;
+      border:1px solid #b99a60;
+      border-radius:12px;font-size:16px;
+      margin:12px 0;
+    }
+    #world .world-filters {
+      display:flex;gap:7px;overflow-x:auto;
+      padding:5px 0;
+    }
+    #world .world-filters button {
+      white-space:nowrap;font-size:12px;
+      padding:10px;
+    }
+    #world .world-country {
+      background:#15283c;
+      border:1px solid #334b60;
+      border-radius:13px;
+      padding:13px;
+      margin:9px 0;
+    }
+    #world .world-country strong {
+      color:#f8f4e9;
+    }
+    #world .world-country small {
+      display:block;color:#b9c8d8;
+      margin-top:5px;
+    }
+  `;
+  document.head.append(style);
+
+  const world = document.createElement("section");
+  world.id = "world";
+  world.className = "hidden";
+
+  world.innerHTML = `
+    <h2>🌍 Le Monde</h2>
+    <div class="world-stat">
+      <div class="world-gold">MA CONQUÊTE DU MONDE</div>
+      <h2 id="worldCount">0 / 195 pays</h2>
+      <p id="worldPercent">0 % du monde</p>
+      <div class="world-bar">
+        <div id="worldFill" class="world-fill"></div>
+      </div>
+      <p id="worldDetails"></p>
+    </div>
+    <input id="worldSearch" class="world-search"
+      type="search" placeholder="🔎 Rechercher un pays...">
+    <div class="world-filters">
+      <button data-world="all">Tous</button>
+      <button data-world="owned">Débloqués</button>
+      <button data-world="missing">À débloquer</button>
+      <button data-world="current">Actuels</button>
+      <button data-world="former">Anciens</button>
+    </div>
+    <div id="worldList"></div>
+  `;
+
+  const nav = document.querySelector("#signedApp nav");
+  const share = document.getElementById("share");
+
+  if(!nav || !share) return;
+
+  share.before(world);
+
+  const navButton = document.createElement("button");
+  navButton.dataset.page = "world";
+  navButton.textContent = "🌍 Monde";
+  nav.insertBefore(navButton, nav.querySelector('[data-page="share"]'));
+
+  const flag = code => {
+    return [...code.toUpperCase()]
+      .map(c => String.fromCodePoint(
+        127397 + c.charCodeAt(0)
+      )).join("");
+  };
+
+  function getStatus(country) {
+    const list = typeof notes !== "undefined" ? notes : [];
+    const matching = list.filter(n => {
+      const c = normalize(n.country);
+      const exact = c === normalize(country.name);
+      const euro = euroCountries.has(country.code) &&
+        n.currency === "EUR" &&
+        n.era === "current" &&
+        (c === "zone euro" || euroCountries.has(
+          countryData.find(x =>
+            normalize(x.name) === c
+          )?.code
+        ));
+      return exact || euro;
+    });
+
+    return {
+      owned:matching.length > 0,
+      current:matching.some(n => n.era === "current"),
+      former:matching.some(n => n.era === "former"),
+      count:matching.length
+    };
+  }
+
+  function renderWorld() {
+    const statuses = countryData.map(c => ({
+      ...c, ...getStatus(c)
+    }));
+
+    const owned = statuses.filter(c => c.owned).length;
+    const current = statuses.filter(c => c.current).length;
+    const former = statuses.filter(c => c.former).length;
+    const pct = owned / 195 * 100;
+
+    document.getElementById("worldCount").textContent =
+      owned + " / 195 pays";
+    document.getElementById("worldPercent").textContent =
+      pct.toFixed(2).replace(".", ",") + " % du monde";
+    document.getElementById("worldFill").style.width =
+      pct + "%";
+    document.getElementById("worldDetails").textContent =
+      current + " pays actuels · " +
+      former + " pays anciens";
+
+    const list = document.getElementById("worldList");
+    list.replaceChildren();
+
+    const filtered = statuses.filter(c => {
+      const matches = normalize(c.name).includes(normalize(search));
+      const selected =
+        mode === "all" ||
+        (mode === "owned" && c.owned) ||
+        (mode === "missing" && !c.owned) ||
+        (mode === "current" && c.current) ||
+        (mode === "former" && c.former);
+      return matches && selected;
+    });
+
+    for(const c of filtered) {
+      const card = document.createElement("div");
+      card.className = "world-country";
+
+      const title = document.createElement("strong");
+      title.textContent =
+        flag(c.code) + " " + c.name;
+
+      const detail = document.createElement("small");
+      detail.textContent = c.owned
+        ? "✓ Débloqué · " + c.count + " billet(s)"
+        : "🔒 À débloquer";
+
+      card.append(title,detail);
+      list.append(card);
+    }
+  }
+
+  document.getElementById("worldSearch")
+    .addEventListener("input", e => {
+      search = e.target.value;
+      renderWorld();
+    });
+
+  world.querySelectorAll("[data-world]").forEach(b => {
+    b.onclick = () => {
+      mode = b.dataset.world;
+      renderWorld();
+    };
+  });
+
+  navButton.onclick = () => {
+    if(typeof show === "function") show("world");
+    document.querySelectorAll(
+      "#signedApp > section"
+    ).forEach(s => {
+      s.classList.toggle("hidden",s.id !== "world");
+    });
+    nav.querySelectorAll("button").forEach(b => {
+      b.classList.toggle("active",b === navButton);
+    });
+    renderWorld();
+  };
+
+  const originalShow = show;
+  show = function(pg) {
+    originalShow(pg);
+    world.classList.toggle("hidden",pg !== "world");
+  };
+
+  renderWorld();
+})();
