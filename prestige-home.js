@@ -163,7 +163,7 @@
     button.append(symbol,title);
 
     button.addEventListener("click", () => {
-      if (["collection","scan","share"].includes(destination)) {
+    if (["collection","scan","share","unlock"].includes(destination)) {
         show(destination);
       } else {
         alert("Cette rubrique arrive dans la prochaine étape de la V5 !");
