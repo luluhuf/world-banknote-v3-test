@@ -7,6 +7,17 @@
 (() => {
   "use strict";
 
+  // Coupures actuelles communes aux pays utilisant l'euro
+  const euroBanknotes = [
+    {value:5, label:"5 euros"},
+    {value:10, label:"10 euros"},
+    {value:20, label:"20 euros"},
+    {value:50, label:"50 euros"},
+    {value:100, label:"100 euros"},
+    {value:200, label:"200 euros"},
+    {value:500, label:"500 euros"}
+  ];
+
   const catalog = {
     RO: {
       country: "Roumanie",
