@@ -277,7 +277,31 @@ countries.get(n.country || "Non identifié").grid.append(card);
     render=function(){
       originalRender();
       renderGallery();
+            updateTotal();
     };
+
+    function updateTotal() {
+      const items = document.getElementById("items");
+      if (!items || typeof notes === "undefined") return;
+
+      let counter = document.getElementById("pc-total");
+      if (!counter) {
+        counter = document.createElement("div");
+        counter.id = "pc-total";
+        counter.style.cssText =
+          "background:#15283c;border:1px solid #e5bd70;" +
+          "border-radius:14px;padding:18px;text-align:center;" +
+          "margin:18px 0;color:#e5bd70;";
+      }
+
+      counter.textContent =
+        "💵 TOTAL DE MA COLLECTION : " + notes.length +
+        (notes.length > 1 ? " billets" : " billet");
+
+      items.before(counter);
+    }
+
+    updateTotal();
 
     renderGallery();
   }
