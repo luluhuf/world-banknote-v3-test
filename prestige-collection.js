@@ -72,6 +72,65 @@
  `;
   document.head.append(css);
 
+function updateCollectionStats() {
+  if (typeof notes === "undefined") return;
+
+  let dashboard = document.getElementById("pc-stats");
+
+  if (!dashboard) {
+    dashboard = document.createElement("div");
+    dashboard.id = "pc-stats";
+    dashboard.style.cssText =
+      "display:grid;grid-template-columns:repeat(3,1fr);" +
+      "gap:8px;margin:15px 0;";
+
+    const items = document.getElementById("items");
+    if (!items) return;
+    items.before(dashboard);
+  }
+
+  const countries = new Set(
+    notes.map(n => n.country).filter(Boolean)
+  );
+
+  const references = new Set(
+    notes.map(n =>
+      [n.country, n.denomination, n.currency,
+       n.issue_year, n.era].join("|")
+    )
+  );
+
+  const duplicates = notes.length - references.size;
+
+  const stats = [
+    ["💵", notes.length, "Billets"],
+    ["🌍", countries.size, "Pays"],
+    ["📚", duplicates, "Doublons"]
+  ];
+
+  dashboard.replaceChildren();
+
+  for (const [icon, value, label] of stats) {
+    const card = document.createElement("div");
+    card.style.cssText =
+      "background:#15283c;border:1px solid #62543d;" +
+      "border-radius:12px;padding:12px 5px;" +
+      "text-align:center;color:#e5bd70;";
+
+    const number = document.createElement("strong");
+    number.style.cssText =
+      "display:block;font-size:24px;margin:6px 0;";
+    number.textContent = value;
+
+    const caption = document.createElement("small");
+    caption.style.color = "#cbd5df";
+    caption.textContent = icon + " " + label;
+
+    card.append(number, caption);
+    dashboard.append(card);
+  }
+}
+
   let search = "";
   const image = (n,side) =>
     side==="front"
