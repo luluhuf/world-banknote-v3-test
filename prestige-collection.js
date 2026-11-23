@@ -73,6 +73,32 @@
   document.head.append(css);
 
   let search = "";
+  
+  const countryFlags = {
+    "France": "🇫🇷",
+    "Roumanie": "🇷🇴",
+    "États-Unis": "🇺🇸",
+    "Etats-Unis": "🇺🇸",
+    "USA": "🇺🇸",
+    "Allemagne": "🇩🇪",
+    "Italie": "🇮🇹",
+    "Espagne": "🇪🇸",
+    "Royaume-Uni": "🇬🇧",
+    "Japon": "🇯🇵",
+    "Chine": "🇨🇳",
+    "Canada": "🇨🇦",
+    "Suisse": "🇨🇭",
+    "Belgique": "🇧🇪",
+    "Portugal": "🇵🇹",
+    "Australie": "🇦🇺",
+    "Brésil": "🇧🇷",
+    "Inde": "🇮🇳",
+    "Mexique": "🇲🇽",
+    "Maroc": "🇲🇦",
+    "Tunisie": "🇹🇳",
+    "Algérie": "🇩🇿"
+  };
+
   const image = (n,side) =>
     side==="front"
       ? n.localFront||n.frontSigned||""
@@ -212,7 +238,7 @@ for (const n of sorted) {
     group.className = "pc-country";
 
     const heading = document.createElement("summary");
-    heading.textContent = "🌍 " + country;
+    heading.textContent = (countryFlags[country] || "🌍") + " " + country;
 
     const count = document.createElement("span");
     count.className = "pc-country-count";
