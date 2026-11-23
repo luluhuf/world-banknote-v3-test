@@ -221,5 +221,9 @@ button.addEventListener("click", () => {
     update();
   };
 
-  update();
+    try {
+    update();
+  } catch (error) {
+    console.error("Erreur accueil Prestige :", error);
+  }
 })();
