@@ -777,11 +777,29 @@ document.body.append(fiche);
     renderWorld();
   };
 
+ 
   const originalShow = show;
+
   show = function(pg) {
+    if (pg === "world") {
+      document.querySelectorAll(
+        "#signedApp > section"
+      ).forEach(section => {
+        section.classList.toggle(
+          "hidden",
+          section.id !== "world"
+        );
+      });
+
+      world.classList.remove("hidden");
+      renderWorld();
+      return;
+    }
+
     originalShow(pg);
-    world.classList.toggle("hidden",pg !== "world");
+    world.classList.add("hidden");
   };
+ 
 
   renderWorld();
 })();
