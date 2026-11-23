@@ -98,6 +98,40 @@
     "Tunisie": "🇹🇳",
     "Algérie": "🇩🇿"
   };
+  
+  function getCountryFlag(country) {
+    const normalize = s => String(s || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+
+    const normalized = normalize(country);
+
+    const flags = {
+      "serbie": "🇷🇸",
+      "kosovo": "🇽🇰",
+      "bosnie-herzegovine": "🇧🇦",
+      "montenegro": "🇲🇪",
+      "macedoine du nord": "🇲🇰",
+      "albanie": "🇦🇱",
+      "croatie": "🇭🇷",
+      "slovenie": "🇸🇮",
+      "hongrie": "🇭🇺",
+      "pologne": "🇵🇱",
+      "republique tcheque": "🇨🇿",
+      "tchequie": "🇨🇿",
+      "slovaquie": "🇸🇰",
+      "bulgarie": "🇧🇬",
+      "grece": "🇬🇷",
+      "turquie": "🇹🇷",
+      "ukraine": "🇺🇦",
+      "russie": "🇷🇺"
+    };
+
+    return countryFlags[country] || flags[normalized] || "🌍";
+  }
+
 
   const image = (n,side) =>
     side==="front"
@@ -238,7 +272,7 @@ for (const n of sorted) {
     group.className = "pc-country";
 
     const heading = document.createElement("summary");
-    heading.textContent = (countryFlags[country] || "🌍") + " " + country;
+    heading.textContent = getCountryFlag(country) + " " + country;
 
     const count = document.createElement("span");
     count.className = "pc-country-count";
