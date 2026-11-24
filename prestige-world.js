@@ -439,9 +439,12 @@ navButton.dataset.page = "world";
       renderWorld();
     });
 
-  world.querySelectorAll("[data-world]").forEach(b => {
+    world.querySelectorAll("[data-world]").forEach(b => {
     b.onclick = () => {
       mode = b.dataset.world;
+      renderWorld();
+    };
+  });
       
   /* Prestige World — Fiches pays V1 */
 
@@ -668,7 +671,7 @@ document.body.append(fiche);
       "\n\nTu ne possèdes pas encore ce billet." +
       "\nVeux-tu ouvrir le scanner ?"
     )) {
-      fiche.remove();
+            overlay.remove();
       if (typeof show === "function") show("scan");
     }
   }
@@ -760,11 +763,7 @@ document.body.append(fiche);
       if(visible[index])openCountry(visible[index]);
     });
 
-      renderWorld();
-    };
-  });
-
-  navButton.onclick = () => {
+        navButton.onclick = () => {
     if(typeof show === "function") show("world");
     document.querySelectorAll(
       "#signedApp > section"
